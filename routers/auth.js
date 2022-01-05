@@ -16,12 +16,12 @@ router.post("/login", async (req, res, next) => {
         .status(400)
         .send({ message: "Please provide both email and password" });
     }
-
+    // add also the space here
     const user = await User.findOne({ where: { email } });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
       return res.status(400).send({
-        message: "User with that email not found or password incorrect"
+        message: "User with that email not found or password incorrect",
       });
     }
 
@@ -35,7 +35,9 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/signup", async (req, res) => {
+  // destr body, take key values from object
   const { email, password, name } = req.body;
+  // if statement
   if (!email || !password || !name) {
     return res.status(400).send("Please provide an email, password and a name");
   }
@@ -44,7 +46,7 @@ router.post("/signup", async (req, res) => {
     const newUser = await User.create({
       email,
       password: bcrypt.hashSync(password, SALT_ROUNDS),
-      name
+      name,
     });
 
     delete newUser.dataValues["password"]; // don't send back the password hash
@@ -66,10 +68,15 @@ router.post("/signup", async (req, res) => {
 // The /me endpoint can be used to:
 // - get the users email & name using only their token
 // - checking if a token is (still) valid
+// authmiddleware in between because you need to be logged
 router.get("/me", authMiddleware, async (req, res) => {
   // don't send back the password hash
-  delete req.user.dataValues["password"];
-  res.status(200).send({ ...req.user.dataValues });
+  // variable user declare, use spread operator to copy froom the user the datavalues
+  const user = { ...req.user.dataValues };
+  delete user["password"];
+  res.status(200).send(user);
+  // delete req.user.dataValues["password"];
+  // res.status(200).send({ ...req.user.dataValues });
 });
 
 module.exports = router;
