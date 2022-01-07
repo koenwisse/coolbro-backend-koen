@@ -11,6 +11,7 @@ router.get("/", async (req, res, next) => {
       Spaces: Spaces,
     };
     res.send(responseBody);
+    console.log(responseBody.Spaces);
   } catch (error) {
     // if database down we get this error / migration not runned
     console.log(error);
