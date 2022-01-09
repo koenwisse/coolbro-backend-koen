@@ -22,9 +22,11 @@ const app = express();
 // CORS middleware:  * Since our api is hosted on a different domain than our client
 // we are are doing "Cross Origin Resource Sharing" (cors)
 // Cross origin resource sharing is disabled by express by default
+
 app.use(corsMiddleWare());
 
-// express.json():be able to read request bodies of JSON requests a.k.a. body-parser
+// Middleware: everything that happens before endpoint (between request and endpoint)
+// express.json():be able to read request bodies of JSON requests a.k.a. body-parser (parse means translating)
 const bodyParserMiddleWare = express.json();
 app.use(bodyParserMiddleWare);
 
